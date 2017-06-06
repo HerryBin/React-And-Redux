@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="lib/react.js"></script>
+    <script src="lib/react-dom.js"></script>
+    <script src="lib/browser.min.js"></script>
+</head>
+<body>
+<div id="container"></div>
+
+<script type="text/babel">
+    function formatName(user) {
+        return user.firstName+'---'+user.lastName;
+    }
+
+    const user={
+        firstName:'Herry',
+        lastName:'B,k'
+    };
+
+    const element=(
+        <h1>
+            hello,{formatName(user)}
+        </h1>
+    );
+
+    ReactDOM.render(
+      element,
+      document.getElementById('container')
+    );
+</script>
+</body>
+</html>
