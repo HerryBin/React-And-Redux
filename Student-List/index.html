@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta name="format-detection" content="telephone=no"/>
+
+    <title>React 学生信息列表</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/list.css">
+</head>
+<body>
+<div class="cm-header">
+    <h1 class="cm-page-title js_title">学生信息列表</h1>
+</div>
+
+<article class="cm-page page-list" id="main">
+</article>
+
+<script src="./libs/react.js"></script>
+<script src="./libs/react-dom.js"></script>
+<script src="./libs/browser.min.js"></script>
+<script type="text/javascript" src="./libs/underscore.js"></script>
+
+<script type="text/javascript" src="./data/data.js"></script>
+<script type="text/babel">
+    let SortBar = React.createClass({
+        _getClassName: function (icon) {
+            return 'icon-sort ' + icon;
+        },
+
+        render: function () {
+            var state = this.props.state;
+            return (
+                    <ul className="bus-tabs sort-bar js_sort_item">
+                        <li className="tabs-item" onClick={this.props.sortByName}>姓名<i
+                                className={this._getClassName(state.name)}></i></li>
+                        <li className="tabs-item" onClick={this.props.sortByAge}>年龄<i
+                                className={this._getClassName(state.age)}></i></li>
+                        <li className="tabs-item" onClick={this.props.sortByGrade}>年级<i
+                                className={this._getClassName(state.grade)}></i></li>
+                    </ul>
+            );
+        }
+    });
+
+    let Item = React.createClass({
+        render: function () {
+            let item = this.props.item, //从父级元素 传过来的值
+                mappingSex = {
+                    'M': '男',
+                    'F': '女'
+                },
+                mappingGrade = {
+                    '1':'一',
+                    '2':'二',
+                    '3':'三',
+                    '4':'四',
+                    '5':'五',
+                    '6':'六',
+                    '7':'七',
+                    '8':'八',
+                    '9':'九'
+                };
+
+            return (
+                    <li className="bus-list-item ">
+                        <div className="bus-seat">
+                            <span className=" fl">{item.name} </span>
+                            <span>（{mappingSex[item.sex]}）</span>
+                        </div>
+                        <div className="detail">
+                            <div className="sub-list set-out">
+                                <span className="bus-go-off">{item.age}岁</span> <span
+                                    className="start">{item.from_station}</span>
+                                <span className="fr price">{mappingGrade[item.gradeLevel]}年级</span>
+                            </div>
+                            <div className="sub-list">
+                                <span className="bus-arrival-time">{item.to_time}</span>
+                            </div>
+                        </div>
+                    </li>
+
+            );
+        }
+    });
+
+    let StudentList = React.createClass({
+        _nameSort: function (data, sort) {
+            data = _.sortBy(data, function (item) {
+                return item.name;
+            });
+
+            if (sort == 'down') {
+                data.reverse();
+            }
+            return data;
+        },
+        _gradeSort: function (data, sort) {
+            data = _.sortBy(data, function (item) {
+                if (sort == 'down') {
+                    return parseInt(-item.gradeLevel);
+                } else {
+                    return parseInt(item.gradeLevel);
+                }
+
+            });
+            /* if (sort == 'down') data.reverse();*/
+            return data;
+        },
+        _ageSort: function (data, sort) {
+            data = _.sortBy(data, function (item) {
+                if (sort == 'down') {
+                    return parseInt(-item.age);
+                } else {
+                    return parseInt(item.age);
+                }
+
+            });
+            /* if (sort == 'down') data.reverse();*/
+            return data;
+        },
+        getSortData: function (data) {
+            let sortCondition = this.props.state, //state 是一个对象，不能使用Array.from 转换成数组
+                temp = [];
+            console.log(this);
+            for (let k in sortCondition) {
+                if (sortCondition[k].length > 0) {
+                    let funName = '_' + k + 'Sort';
+                    temp = this[funName](data, sortCondition[k]);
+                    return temp;
+                }
+            }
+        },
+        render: function () {
+            //this.state 状态改变，会多次重新render
+            console.log('list render');
+            let main,
+                data = this.getSortData(this.props.data);
+            main = data.map(function (item) {
+                return <Item key={item.id} item={item}/>;
+            });
+            return (
+                    <ul className="bus-list js_bus_list">
+                        {main}
+                    </ul>
+            );
+        }
+    });
+
+    /*
+     主函数入口
+     一层一层嵌套 实现
+     <App>
+     <sortBar>
+     <StudentList>
+     <Item>
+     */
+    var App = React.createClass({
+        getInitialState: function () {
+            //ReactJS 構造函數
+            return {
+                name: 'up',
+                age: '',
+                grade: ''
+            }
+
+        },
+        sortByName: function () {
+            this._setData('name');
+        },
+
+        sortByAge: function () {
+            this._setData('age');
+        },
+        sortByGrade: function () {
+            this._setData('grade');
+        },
+        resetData: function () {
+            this.setState({
+                name: '',
+                age: '',
+                grade: ''
+            });
+        },
+
+        _setData: function (key) {
+            //从这个入口进去，保证筛选条件只有 一个值，不会存在多个筛选条件
+            var param = {},
+                sortCondition = this.state[key];
+
+            if (sortCondition != '') {
+                param[key] = sortCondition == 'up' ? 'down' : 'up';
+                //this.state[key]=sortCondition=='up'?'down':'up';
+            } else {
+                this.resetData();
+                /*this.state[key] = 'down';*/
+                param[key] = 'down';
+            }
+            /*this.setState(this.state);*/
+            this.setState(param);
+        },
+        render: function () {
+            return (
+                    <div>
+                        <div className="js_sort_wrapper sort-bar-wrapper">
+                            <SortBar state={this.state} sortByName={this.sortByName} sortByAge={this.sortByAge}
+                                     sortByGrade={this.sortByGrade}/>
+                        </div>
+                        <StudentList data={data} state={this.state}/>
+                    </div>
+            );
+        }
+    });
+
+
+    var data = getListData();
+
+    ReactDOM.render(
+            <App data={data}/>,
+        document.getElementById('main')
+    );
+
+</script>
+</body>
+</html>
