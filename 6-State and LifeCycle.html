@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress ALL -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,6 +12,7 @@
 
 <div id="container1"></div>
 <div id="container2"></div>
+<div id="container3"></div>
 <script type="text/babel">
     /**
      * 我们可以通过使用 ReactDOM.render()去改变UI的输出
@@ -81,6 +83,34 @@
             <Clock2 />,
         document.getElementById('container2')
     );
+
+    var Hello= React.createClass({
+        getInitialState:function(){
+            console.log('initial state');
+            return{
+                fontSize:'12px',
+                color:'red'
+            };
+        },
+        render: function () {
+            var state = this.props.state;
+            return (
+                    <div style={ {color:this.state.color }}>hello world </div>
+            );
+        },
+        componentWillMount:function(){
+            console.log('will Mount');
+        },
+        componentDidMount:function(){
+            console.log('did Mount');
+        }
+    });
+
+    ReactDOM.render(
+            <Hello />,
+        document.getElementById('container3')
+    );
+
 
     /**
      * 使用 State 需注意的点

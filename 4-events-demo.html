@@ -18,10 +18,27 @@
             console.log('点击结束');
         }
 
+        
+        function showTest(event) {
+            console.log(event);
+            var tipE = ReactDOM.findDOMNode(this.refs.tip);
+        }
+        /*
+        * 含有多个标签时，要多<div>包裹起来
+        * */
+
+        let _ref='tip';
         return (
-                <a href="#" onClick={handleClick}>
-                    Click me
-                </a>
+                <div>
+                    <p>
+                        <button onClick={showTest}>显示</button>
+
+                    </p>
+
+                    <a href="#" onClick={handleClick}>
+                        Click me
+                    </a>
+                </div>
         )
     }
 
