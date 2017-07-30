@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../lib/react.js"></script>
+    <script src="../lib/react-dom.js"></script>
+    <script src="../lib/browser.min.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<div id="divToggle"></div>
+<script type="text/babel">
+    function ActionLink() {
+        function handleClick(e) {
+            console.log('开始点击');
+            return false; //e.preventDefault();
+            console.log('点击结束');
+        }
+
+        
+        function showTest(event) {
+            console.log(event);
+            var tipE = ReactDOM.findDOMNode(this.refs.tip);
+        }
+        /*
+        * 含有多个标签时，要多<div>包裹起来
+        * */
+
+        let _ref='tip';
+        return (
+                <div>
+                    <p>
+                        <button onClick={showTest}>显示</button>
+
+                    </p>
+
+                    <a href="#" onClick={handleClick}>
+                        Click me
+                    </a>
+                </div>
+        )
+    }
+
+    ReactDOM.render(
+            <ActionLink/>,
+        document.getElementById('container')
+    );
+
+    class Toggle extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                isToggleOn: true
+            };
+
+            this.handleClick = this.handleClick.bind(this);
+        }
+
+        handleClick() {
+            this.setState(prevState => ({
+                isToggleOn: !prevState.isToggleOn
+            }));
+        }
+
+        render() {
+            return (
+                    <button onClick={this.handleClick}>
+                        {this.state.isToggleOn ? 'ON' : 'OFF'}
+                    </button>
+            );
+        }
+    }
+
+    ReactDOM.render(
+        <Toggle />,
+        document.getElementById('divToggle')
+    );
+
+</script>
+</body>
+</html>

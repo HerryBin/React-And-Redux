@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World</title>
+    <script src="../lib/react.js"></script>
+    <script src="../lib/react-dom.js"></script>
+    <script src="../lib/browser.min.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<div id="arrContainer"></div>
+<script type="text/babel">
+    function tick() {
+        const element = (
+                <div>
+                    <h1>Hello, world!</h1>
+                    <h2>It is {new Date().toLocaleTimeString()}.</h2>
+                </div>
+        );
+        ReactDOM.render(
+            element,
+            document.getElementById('container')
+        );
+    }
+    setInterval(tick, 1000);
+
+    /**
+     * ReactDOM.render() 显示某个元素，还可以对数组中的元素进行解析
+     * React 对 array or 可 iterator 元素，必须要要有唯一的 key 属性值
+     */
+
+    let arr=[
+        <h1 key="1">这是一个h1元素</h1>,
+        <input key="2" type="button" value="Button元素"/>
+    ];
+
+    ReactDOM.render(
+            <div>{arr}</div> ,
+            document.getElementById('arrContainer')
+    );
+
+</script>
+</body>
+</html>
