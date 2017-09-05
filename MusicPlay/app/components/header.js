@@ -1,8 +1,8 @@
 import React from 'react';
 import '../less/header.less';
 
-let header = React.createClass({
-
+/*let header = React.createClass({ })*/
+class Header extends React.Component{
     render() {
         return (
        		<div className='row components-header'>
@@ -11,5 +11,5 @@ let header = React.createClass({
        		</div>
         );
     }
-});
-export default header;
+}
+export default Header;
