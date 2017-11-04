@@ -1,0 +1,7 @@
+	  
+						     this.props
+						     this。state
+	   React.createClass()   render()
+	   						 生命周期方法
+	
+React  ReactDOM.render()

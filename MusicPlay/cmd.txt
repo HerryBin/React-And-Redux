@@ -1,0 +1,35 @@
+
+一
+	npm init   创建package.json 文件
+
+	npm install react --save 会自动更新package.json 文件中的 dependencies 项
+
+	粘贴了依赖项配置后，使用 npm install 安装全部依赖文件
+
+	手动新建 webpack.config.js
+
+		entry:入口文件
+		output:输出文件配置
+
+	Webpack dev server
+		搭建本地服务器
+		自动刷新	
+
+二
+	各个模块意义
+		components 
+			header.js  用来显示 播放器 log 以及名称
+			progress.js 用来显示播放进度，播放了多少秒
+
+		app
+			index.js 
+			Root.js  用来	
+
+		page
+			分离播放页面的操作
+
+		config
+			存放公共配置，里面有播放列表信息，歌曲名称、歌曲链接等	
+
+	因为 listItem==>musicList==>root==>App
+	传递链太长，采用事件订阅		
